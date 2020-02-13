@@ -121,4 +121,41 @@ class RectWaveBouncyView(ctx : Context) : View(ctx) {
             }
         }
     }
+
+    data class RWNode(var i : Int, val state : State = State()) {
+
+        private var next : RWNode? = null
+        private var prev : RWNode? = null
+
+        init {
+
+        }
+
+        fun addNeighbor() {
+            if (i < nodes - 1) {
+                next = RWNode(i + 1)
+                next?.prev = this
+            }
+        }
+
+        fun draw(canvas : Canvas, paint : Paint) {
+            canvas.drawRWNode(i, state.scale, paint)
+        }
+
+        fun update(cb : (Float) -> Unit) {
+            state.update(cb)
+        }
+
+        fun getNext(dir : Int, cb : () -> Unit) : RWNode {
+            var curr : RWNode? = prev
+            if (dir == 1) {
+                curr = next
+            }
+            if (curr != null) {
+                return curr
+            }
+            cb()
+            return this
+        }
+    }
 }
