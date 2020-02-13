@@ -208,4 +208,13 @@ class RectWaveBouncyView(ctx : Context) : View(ctx) {
             }
         }
     }
+
+    companion object {
+
+        fun create(activity : Activity) : RectWaveBouncyView {
+            val view : RectWaveBouncyView = RectWaveBouncyView(activity)
+            activity.setContentView(view)
+            return view
+        }
+    }
 }
