@@ -146,6 +146,10 @@ class RectWaveBouncyView(ctx : Context) : View(ctx) {
             state.update(cb)
         }
 
+        fun startUpdating(cb : () -> Unit) {
+            state.startUpdating(cb)
+        }
+
         fun getNext(dir : Int, cb : () -> Unit) : RWNode {
             var curr : RWNode? = prev
             if (dir == 1) {
@@ -156,6 +160,30 @@ class RectWaveBouncyView(ctx : Context) : View(ctx) {
             }
             cb()
             return this
+        }
+    }
+
+    data class BouncyRectWave(var i : Int) {
+
+        private val root : RWNode = RWNode(0)
+        private var curr : RWNode = root
+        private var dir : Int = 1
+
+        fun draw(canvas : Canvas, paint : Paint) {
+            root.draw(canvas, paint)
+        }
+
+        fun update(cb : (Float) -> Unit) {
+            curr.update {
+                curr = curr.getNext(dir) {
+                    dir *= -1
+                }
+                cb(it)
+            }
+        }
+
+        fun startUpdating(cb : () -> Unit) {
+            curr.startUpdating(cb)
         }
     }
 }
