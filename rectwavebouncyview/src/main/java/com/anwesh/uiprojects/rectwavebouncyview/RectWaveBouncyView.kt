@@ -186,4 +186,26 @@ class RectWaveBouncyView(ctx : Context) : View(ctx) {
             curr.startUpdating(cb)
         }
     }
+
+    data class Renderer(var view : RectWaveBouncyView) {
+
+        private val animator : Animator = Animator(view)
+        private val brw : BouncyRectWave = BouncyRectWave(0)
+
+        fun render(canvas : Canvas, paint : Paint) {
+            canvas.drawColor(backColor)
+            brw.draw(canvas, paint)
+            animator.animate {
+                brw.update {
+                    animator.stop()
+                }
+            }
+        }
+
+        fun handleTap() {
+            brw.startUpdating {
+                animator.start()
+            }
+        }
+    }
 }
