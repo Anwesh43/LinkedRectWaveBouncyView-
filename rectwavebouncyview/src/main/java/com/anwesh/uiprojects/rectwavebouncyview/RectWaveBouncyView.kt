@@ -34,8 +34,9 @@ fun Canvas.drawRectWave(i : Int, scale : Float, w : Float, size : Float, paint :
     val sj : Float = 1f - 2 * (i % 2)
     val si : Float = 1f - (i % 2)
     save()
-    translate(gap * (i + 1), -size * si)
-    drawLine(0f, 0f, gap * sf1, size * sf2 * sj, paint)
+    translate(gap * i, -size * si)
+    drawLine(0f, 0f, gap * sf1, 0f, paint)
+    drawLine(gap * sf1, 0f, gap * sf1, size * sf2 * sj, paint)
     restore()
 }
 
@@ -130,7 +131,7 @@ class RectWaveBouncyView(ctx : Context) : View(ctx) {
         private var prev : RWNode? = null
 
         init {
-
+            addNeighbor()
         }
 
         fun addNeighbor() {
@@ -167,12 +168,11 @@ class RectWaveBouncyView(ctx : Context) : View(ctx) {
 
     data class BouncyRectWave(var i : Int) {
 
-        private val root : RWNode = RWNode(0)
-        private var curr : RWNode = root
+        private var curr : RWNode = RWNode(0)
         private var dir : Int = 1
 
         fun draw(canvas : Canvas, paint : Paint) {
-            root.draw(canvas, paint)
+            curr.draw(canvas, paint)
         }
 
         fun update(cb : (Float) -> Unit) {
